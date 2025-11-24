@@ -63,7 +63,7 @@ export default function Home() {
         </section>
 
         <Callout title="Heads up" className="mt-16">
-          Log in and sign up will live under <span className="font-semibold">(auth)</span> soon. For now,
+          Log in and sign up will live under <span className="font-semibold">auth</span> soon. For now,
           these buttons lead the way once those routes are ready.
         </Callout>
       </Container>
