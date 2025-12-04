@@ -49,6 +49,7 @@ backend/temp/
 backend/*.pdf
 backend/*.docx
 backend/secrets/firebase-credentials.json
+.security
 
 # Node
 node_modules/
