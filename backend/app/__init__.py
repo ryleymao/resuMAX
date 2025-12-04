@@ -1,7 +1,6 @@
 """
-resuMAX Backend API
-
-Resume optimization service using traditional NLP techniques.
+ResuMAX Backend Application
+A production-grade resume optimization platform
 """
 
 __version__ = "1.0.0"

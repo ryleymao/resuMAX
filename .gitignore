@@ -4,21 +4,33 @@ __pycache__/
 *$py.class
 *.so
 .Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
 venv/
 env/
 ENV/
-*.egg-info/
-dist/
-build/
+.venv
 
-# Environment Variables (SECRETS - DO NOT COMMIT!)
+# Environment variables
 .env
-*.env
-!.env.example
-
-# Firebase Service Account Keys (SECRETS - DO NOT COMMIT!)
-*serviceAccountKey.json
-*firebase-adminsdk*.json
+.env.local
+.env.*.local
 
 # IDEs
 .vscode/
@@ -31,18 +43,23 @@ build/
 .DS_Store
 Thumbs.db
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
+# Application
+backend/uploads/
+backend/temp/
+backend/*.pdf
+backend/*.docx
 
-# Logs
-*.log
-
-# Cloud Build
-.gcloud/
-
-# Node (frontend)
+# Node
 node_modules/
-.next/
-out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build outputs
+dist/
+dist-ssr/
+*.local
+
+# Firebase
+**/serviceAccountKey.json

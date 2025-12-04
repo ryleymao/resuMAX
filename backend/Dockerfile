@@ -1,41 +1,29 @@
-# Build stage
-FROM python:3.11-slim as builder
-
-WORKDIR /app
-
-# Install build dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install python dependencies
-COPY requirements.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt
-
-# Pre-download sentence-transformers model
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
-
-# Runtime stage
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy only necessary files from builder
-COPY --from=builder /root/.local /root/.local
-COPY --from=builder /root/.cache/torch /root/.cache/torch
-COPY --from=builder /root/.cache/huggingface /root/.cache/huggingface
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install Playwright browsers
+RUN playwright install chromium
+RUN playwright install-deps chromium
 
 # Copy application code
-COPY ./app ./app
+COPY . .
 
-# Set environment variables
-ENV PATH=/root/.local/bin:$PATH
-ENV PORT=8080
-ENV PYTHONUNBUFFERED=1
+# Create required directories
+RUN mkdir -p uploads temp
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8000
 
-# Run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1"]
+# Run application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

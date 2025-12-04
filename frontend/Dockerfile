@@ -1,19 +1,28 @@
-# syntax=docker/dockerfile:1
-FROM node:20-alpine
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies (npm install to match your local workflow)
-COPY package.json package-lock.json ./
-RUN npm install
+# Copy package files
+COPY package*.json ./
 
-# Copy the rest of the app (for non-mounted use). When developing with a bind mount, this can be overridden.
+# Install dependencies
+RUN npm ci
+
+# Copy source code
 COPY . .
 
-ENV NODE_ENV=development
-ENV PORT=3000
+# Build application
+RUN npm run build
 
-EXPOSE 3000
+# Production image
+FROM nginx:alpine
 
-# Start Next.js in dev mode, listening on all interfaces
-CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0", "--port", "3000"]
+# Copy built assets from builder
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
